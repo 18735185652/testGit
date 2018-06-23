@@ -1,1 +1,9 @@
-这是第一次编辑的文件
+﻿这是第一次编辑的文件
+
+1 git config --global user.name "18735185652"
+2 git config --global user.email "592908853@qq.com"
+3 git config --list
+4 mkdir wenjian
+5 ls 查看文件  ls -a 查看隐藏文件
+6 touch 1.txt
+7 vim 1.txt 编辑文件
