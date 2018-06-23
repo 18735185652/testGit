@@ -7,3 +7,4 @@
 5 ls 查看文件  ls -a 查看隐藏文件
 6 touch 1.txt
 7 vim 1.txt 编辑文件
+666
