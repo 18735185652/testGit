@@ -333,3 +333,139 @@ class Sum extends Component{
 render(<Sum/>,window.app)
 ```
 
+## **复合组件**
+
+```jsx
+import React,{Component} from 'react';
+import {render} from 'react-dom';
+import "bootstrap/dist/css/bootstrap.css";
+/* 单项数据流：数据只能从父组件传给子组件 */
+/* 复合组件 */
+/* npm install bootstrap -S */
+class Penel extends Component{
+    constructor(){
+        super()
+        this.state = {color:'black'}
+    }
+    setColor(color){
+        this.setState({color:color})
+    }
+    render(){
+        return (
+            <div>
+                <button onClick={()=>{this.setColor("red")}}>红</button>
+                <button onClick={()=>{this.setColor("green")}}>绿</button>
+                <PenelHead color={this.state.color} head={this.props.head}/>,
+                <PenelBody body={this.props.body}/>,
+                <PenelFooter footer={this.props.footer}/>
+            </div> 
+        )
+    }
+}
+class PenelHead extends Component{
+    render(){
+        return <div style={{color:this.props.color}} className="panel-heading"> {this.props.head} </div>
+        
+    }
+}
+class PenelBody extends Component{
+    render(){
+        return <div className="panel-body">{this.props.body} </div>
+    }
+}
+class PenelFooter extends Component{
+    render(){
+        return <div className="panel-footer">{this.props.footer}</div>
+    }
+}
+
+render(<Penel head="头" body="体" footer="尾"/>,window.app)
+
+```
+
+## React生命周期
+
+```jsx
+import React,{Component} from 'react';
+import {render} from 'react-dom';
+import "bootstrap/dist/css/bootstrap.css";
+
+/* 组件的完整生命周期 */
+/* 一些代码的编写顺序 */
+
+class Counter extends Component{
+    constructor(){
+        super();
+        this.state = {num:0};
+    }
+    //组件将要被挂载
+    componentWillMount(){
+        console.log("1.componentWillMount 组件将要被挂载")
+    }
+
+    handleClick=()=>{
+        /* setState方法是异步的，所以不能再赋值之后立即获取最新的state值,可以在回调函数中获取最新状态的值 */
+        this.setState({
+            num:this.state.num+1 
+        },()=>{
+            console.log(this.state.num);
+        })
+        console.log(this.state.num);
+    }
+    //newProps  新的属性对象
+    //newState  新的状态对象
+    shouldComponentUpdate(newProps,newState){
+        console.log("4.shouldComponentUpdate 组件是否要进行更新")
+        if(newState.num%5 === 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    componentWillUpdate(){
+        console.log("5.componentWillUpdate 组件将要更新")
+    }
+    componentDidUpdate(){
+        console.log("5.componentDidUpdate 组件更新完成")
+    }
+    render(){
+        console.log('2.render 组件挂载')
+        return (
+            <div style={{border:'1px solid red',padding:'5px '}}>
+                <p>{this.state.num}</p>
+                <button onClick={this.handleClick}>+</button>
+                <SubCounter num={this.state.num}/>
+            </div>
+        )
+    }
+    componentDidMount(){
+        console.log("3.componentDidMount 组件挂载完成")
+    } 
+}
+
+//子计数器
+class SubCounter extends Component{
+
+    componentWillReceiveProps(newProps){
+        console.log('6.SubCounter componentWillReceiveProps 组件将要接收到新的属性对象' )
+    }
+    shouldComponentUpdate(newProps,newState){
+        console.log(newProps)
+        if(newProps.num%3===0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    render(){
+        return (
+            <div style={{border:'1px solid blue'}}>
+                 <p>{this.props.num} </p>
+            </div>
+        )
+    }
+}
+
+render(<Counter/>,window.app)
+```
+
